@@ -1,0 +1,32 @@
+{
+  "bindings": [
+    {
+      "name": "gwuQueueItem",
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "test-inputmultiout-queue",
+      "connection": "AzureWebJobsStorage"
+    },
+    {
+      "name": "$return",
+      "type": "queue",
+      "direction": "out",
+      "queueName": "test-output-queue",
+      "connection": "AzureWebJobsStorage"      
+    },
+	  {
+      "name": "output1",
+      "type": "queue",
+      "direction": "out",
+      "queueName": "test-output-queue1",
+      "connection": "AzureWebJobsStorage"      
+    },
+	  {
+      "name": "output2",
+      "type": "queue",
+      "direction": "out",
+      "queueName": "test-output-queue2",
+      "connection": "AzureWebJobsStorage"      
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "gwuEventHubMessages",
+      "direction": "in",
+      "eventHubName": "gofunction",
+      "connection": "EventHubConnectionString",
+      "cardinality": "many",
+      "consumerGroup": "$Default",
+      "dataType": "string"      
+    },
+    {
+      "name": "$return",
+      "type": "queue",
+      "direction": "out",
+      "queueName": "eventhub-output",
+      "connection": "AzureWebJobsStorage"
+    }
+  ]
+}

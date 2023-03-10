@@ -1,0 +1,20 @@
+{
+  "bindings": [
+    {
+      "type": "blobTrigger",
+      "direction": "in",
+      "name": "gwuBlob",
+      "path": "test-input-goworker/{name}",
+      "dataType": "binary",
+      "connection": "AzureWebJobsStorage"
+    },
+    {
+      "type": "blob",
+      "direction": "out",
+      "name": "$return",
+      "path": "test-output-goworker/{name}",
+      "dataType": "binary",
+      "connection": "AzureWebJobsStorage"
+    }
+  ]
+}
