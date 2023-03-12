@@ -35,11 +35,13 @@ func _log(r *http.Request, m string) string {
 func queryParamsToString(queryParams *gofunc.DataHttpRequest) string {
 	fmt.Println("queryParamsToString")
 	var buffer bytes.Buffer
+	buffer.WriteString("Query string:")
 
 	for k, v := range queryParams.URL.Query() {
 		fmt.Println("k:", k, "v:", v)
 		buffer.WriteString(fmt.Sprintf("%v=%v,", k, v))
 	}
+
 	return buffer.String()
 }
 

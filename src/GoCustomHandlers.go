@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
@@ -248,7 +247,7 @@ func httpTriggerWithOutputs(w http.ResponseWriter, r *http.Request) {
 
 	//Http output
 	res := make(map[string]interface{})
-	res["statusCode"] = "201"
+	res["statusCode"] = http.StatusOK
 	res["body"] = movieStar
 	res["headers"] = headers
 
@@ -256,7 +255,7 @@ func httpTriggerWithOutputs(w http.ResponseWriter, r *http.Request) {
 	outputs["res"] = res
 
 	//This goes to $return in function.json
-	returnValue := gofunc.ReturnValue{Data: textResponse("Return val from httpTriggerWithOutputs", t)}
+	returnValue := gofunc.ReturnValue{Data: textResponse("Return value from httpTriggerWithOutputs", t)}
 
 	invokeResponse := gofunc.InvokeResponse{
 		Outputs:     outputs,
@@ -274,6 +273,7 @@ func httpTriggerWithOutputs(w http.ResponseWriter, r *http.Request) {
 	w.Write(js)
 }
 
+//https://gwugofunction.azurewebsites.net/api/HttpTriggerStringReturnValue?os=Windows&os=Linux&db=SQLServer&db=PostgresSQL&db=MongoDB
 func httpTriggerHandlerStringReturnValue(w http.ResponseWriter, r *http.Request) {
 	t := _log(r, "httpTriggerHandlerStringReturnValue")
 
@@ -300,35 +300,26 @@ func httpTriggerHandlerStringReturnValue(w http.ResponseWriter, r *http.Request)
 	//Http output
 	res := make(map[string]interface{})
 	res["statusCode"] = "201"
-	res["body"] = textResponse("httpTriggerHandlerStringReturnValue", t)
+	res["body"] = textResponse("HTTP output", t)
 	res["headers"] = headers
 
 	outputs := make(map[string]interface{})
 	outputs["res"] = res
 
-	//queryString := queryParamsToString(dataHttpRequest)
-
-	var buffer bytes.Buffer
-	buffer.WriteString("Query string:")
-	for k, v := range r.URL.Query() {
-		fmt.Println("k:", k, "v:", v)
-		buffer.WriteString(fmt.Sprintf("%v=%v,", k, v))
-	}
-	//This goes to $return in function.json
-	returnValue := buffer.String()
+	queryString := queryParamsToString(gofunc.HttpRequestData(invokeReq))
 
 	logs := []string{
 		//fmt.Sprintf("URL: %v", dataHttpRequest.URL),
 		//fmt.Sprintf("METHOD: %v", dataHttpRequest.Method),
 		fmt.Sprintf("URL: %v", r.URL),
 		fmt.Sprintf("METHOD: %v", r.Method),
-		fmt.Sprintf("QUERY: %v", returnValue),
+		fmt.Sprintf("QUERY: %v", queryString),
 	}
 
 	invokeResponse := gofunc.InvokeResponseStringReturnValue{
 		Outputs:     outputs,
 		Logs:        logs,
-		ReturnValue: returnValue}
+		ReturnValue: queryString}
 
 	js, err := json.Marshal(invokeResponse)
 	if err != nil {
